@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arizona Plate Generator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="panel controls" aria-label="Plate controls">
+        <h1>Arizona State University License Plate Generator</h1>
+        <p class="subtitle">Create downloadable ASU plate mockups.</p>
+
+        <fieldset class="color-options">
+          <legend>Select background color</legend>
+          <div class="color-grid">
+            <label class="color-option" title="ASU Maroon">
+              <input type="radio" name="backgroundColor" value="#8C1D40" />
+              <span class="swatch" style="background-color:#8C1D40;"></span>
+            </label>
+            <label class="color-option" title="ASU Gold">
+              <input type="radio" name="backgroundColor" value="#FFC627" />
+              <span class="swatch" style="background-color:#FFC627;"></span>
+            </label>
+            <label class="color-option" title="ASU Black">
+              <input type="radio" name="backgroundColor" value="#000000" checked />
+              <span class="swatch" style="background-color:#000000;"></span>
+            </label>
+            <label class="color-option" title="ASU White">
+              <input type="radio" name="backgroundColor" value="#FFFFFF" />
+              <span class="swatch" style="background-color:#FFFFFF;"></span>
+            </label>
+            <label class="color-option" title="ASU Green">
+              <input type="radio" name="backgroundColor" value="#78BE20" />
+              <span class="swatch" style="background-color:#78BE20;"></span>
+            </label>
+            <label class="color-option" title="ASU Blue">
+              <input type="radio" name="backgroundColor" value="#00A3E0" />
+              <span class="swatch" style="background-color:#00A3E0;"></span>
+            </label>
+            <label class="color-option" title="ASU Orange">
+              <input type="radio" name="backgroundColor" value="#FF7F32" />
+              <span class="swatch" style="background-color:#FF7F32;"></span>
+            </label>
+            <label class="color-option" title="ASU Gray">
+              <input type="radio" name="backgroundColor" value="#747474" />
+              <span class="swatch" style="background-color:#747474;"></span>
+            </label>
+            <label class="color-option" title="ASU Copper">
+              <input type="radio" name="backgroundColor" value="#AF674B" />
+              <span class="swatch" style="background-color:#AF674B;"></span>
+            </label>
+            <label class="color-option" title="ASU Turquoise">
+              <input type="radio" name="backgroundColor" value="#4AB7C4" />
+              <span class="swatch" style="background-color:#4AB7C4;"></span>
+            </label>
+            <label class="color-option" title="ASU Pink">
+              <input type="radio" name="backgroundColor" value="#E74973" />
+              <span class="swatch" style="background-color:#E74973;"></span>
+            </label>
+          </div>
+        </fieldset>
+
+        <label for="presetOverlay">Choose design</label>
+        <select id="presetOverlay">
+          <option value="img/a-mountain-overlay.png">A-Mountain Overlay</option>
+          <option value="img/old-main-overlay.png">Old Main Overlay</option>
+          <option value="img/pitchfork-overlay.png" selected>Pitchfork Overlay</option>
+          <option value="img/sparky-head-overlay.png">Sparky Head Overlay</option>
+          <option value="img/sparky-overlay.png">Sparky Overlay</option>
+        </select>
+
+        <fieldset class="color-options">
+          <legend>Select text color</legend>
+          <div class="color-grid color-grid-text">
+            <label class="color-option" title="Black">
+              <input type="radio" name="textColor" value="#000000" />
+              <span class="swatch" style="background-color:#000000;"></span>
+            </label>
+            <label class="color-option" title="White">
+              <input type="radio" name="textColor" value="#FFFFFF" />
+              <span class="swatch" style="background-color:#FFFFFF;"></span>
+            </label>
+            <label class="color-option" title="ASU Gold">
+              <input type="radio" name="textColor" value="#FFC627" checked />
+              <span class="swatch" style="background-color:#FFC627;"></span>
+            </label>
+          </div>
+        </fieldset>
+
+        <label for="textLine1">Top text</label>
+        <input id="textLine1" type="text" maxlength="14" value="ARIZONA" />
+
+        <label for="textLine3">License plate number</label>
+        <input id="textLine3" type="text" maxlength="6" value="5PARKY" />
+
+        <label for="textLine2">Bottom text</label>
+        <input id="textLine2" type="text" maxlength="30" value="Arizona State University" />
+
+        <div class="actions">
+          <button id="downloadBtn" type="button">Download</button>
+        </div>
+      </section>
+
+      <section class="panel preview" aria-label="Plate preview">
+        <canvas id="plateCanvas" width="1200" height="600"></canvas>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
