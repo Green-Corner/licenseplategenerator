@@ -159,6 +159,38 @@ button:hover {
   filter: brightness(1.05);
 }
 
+.share-panel {
+  margin-top: 0.5rem;
+}
+
+.share-title {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.share-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.share-btn {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  font-weight: 600;
+  padding: 0.5rem 0.45rem;
+}
+
+.share-btn:hover {
+  filter: none;
+  border-color: var(--accent);
+}
+
 .preview {
   padding: 1rem;
   display: grid;
@@ -184,5 +216,9 @@ button:hover {
 
   .preview {
     order: 1;
+  }
+
+  .share-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

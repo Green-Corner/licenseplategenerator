@@ -8,6 +8,11 @@ const textLine1Input = document.getElementById("textLine1");
 const textLine2Input = document.getElementById("textLine2");
 const textLine3Input = document.getElementById("textLine3");
 const downloadBtn = document.getElementById("downloadBtn");
+const nativeShareBtn = document.getElementById("nativeShareBtn");
+const shareXBtn = document.getElementById("shareXBtn");
+const shareFacebookBtn = document.getElementById("shareFacebookBtn");
+const shareLinkedInBtn = document.getElementById("shareLinkedInBtn");
+const copyLinkBtn = document.getElementById("copyLinkBtn");
 
 let presetOverlayImage = null;
 const presetOverlayCache = {};
@@ -64,6 +69,51 @@ function syncSelectedOptionClass(inputs) {
   });
 }
 
+function getEmbossTone(textColor) {
+  const color = textColor.toUpperCase();
+  if (color === "#FFFFFF") {
+    return {
+      highlight: "rgba(255, 255, 255, 0.9)",
+      shadow: "rgba(0, 0, 0, 0.45)",
+      edge: "rgba(0, 0, 0, 0.3)",
+    };
+  }
+  if (color === "#FFC627") {
+    return {
+      highlight: "rgba(255, 246, 205, 0.82)",
+      shadow: "rgba(92, 63, 0, 0.4)",
+      edge: "rgba(80, 55, 0, 0.3)",
+    };
+  }
+  return {
+    highlight: "rgba(255, 255, 255, 0.38)",
+    shadow: "rgba(0, 0, 0, 0.45)",
+    edge: "rgba(0, 0, 0, 0.3)",
+  };
+}
+
+function drawEmbossedText(text, x, y, font, textColor, textBaseline = "alphabetic") {
+  const tone = getEmbossTone(textColor);
+  ctx.save();
+  ctx.font = font;
+  ctx.textAlign = "center";
+  ctx.textBaseline = textBaseline;
+
+  ctx.fillStyle = tone.highlight;
+  ctx.fillText(text, x - 1.4, y - 1.4);
+
+  ctx.fillStyle = tone.shadow;
+  ctx.fillText(text, x + 1.4, y + 1.4);
+
+  ctx.strokeStyle = tone.edge;
+  ctx.lineWidth = 1.3;
+  ctx.strokeText(text, x, y);
+
+  ctx.fillStyle = textColor;
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
 function drawPlate() {
   const width = canvas.width;
   const height = canvas.height;
@@ -92,20 +142,19 @@ function drawPlate() {
   roundedRectPath(ctx, 10, 10, width - 20, height - 20, cornerRadius);
   ctx.stroke();
 
-  ctx.fillStyle = getSelectedTextColor();
-  ctx.textAlign = "center";
+  const selectedTextColor = getSelectedTextColor();
   const licensePlateNumber = (textLine3Input.value || "").toUpperCase().slice(0, 6);
 
-  ctx.font = "bold 72px Arial, sans-serif";
-  ctx.fillText(textLine1Input.value || " ", width / 2, 108);
-
-  ctx.font = "400 352px 'Zurich Extra Condensed Regular', Arial, sans-serif";
-  ctx.textBaseline = "middle";
-  ctx.fillText(licensePlateNumber || " ", width / 2, height / 2);
-  ctx.textBaseline = "alphabetic";
-
-  ctx.font = "600 54px Arial, sans-serif";
-  ctx.fillText(textLine2Input.value || " ", width / 2, 548);
+  drawEmbossedText(textLine1Input.value || " ", width / 2, 108, "bold 72px Arial, sans-serif", selectedTextColor);
+  drawEmbossedText(
+    licensePlateNumber || " ",
+    width / 2,
+    height / 2 + 18,
+    "400 352px 'Zurich Extra Condensed Regular', Arial, sans-serif",
+    selectedTextColor,
+    "middle",
+  );
+  drawEmbossedText(textLine2Input.value || " ", width / 2, 548, "600 54px Arial, sans-serif", selectedTextColor);
 }
 
 function handlePresetOverlay() {
@@ -161,6 +210,59 @@ function downloadPlate() {
   }
 }
 
+function getShareContext() {
+  const shareUrl = window.location.href;
+  return {
+    url: shareUrl,
+    text: "Check out this ASU license plate generator.",
+    title: "ASU License Plate Generator",
+  };
+}
+
+function openSharePopup(url) {
+  window.open(url, "_blank", "noopener,noreferrer,width=720,height=640");
+}
+
+function handleNativeShare() {
+  if (!navigator.share) return;
+  const share = getShareContext();
+  navigator.share({
+    title: share.title,
+    text: share.text,
+    url: share.url,
+  }).catch(() => {});
+}
+
+function handleShareX() {
+  const share = getShareContext();
+  const url = `https://x.com/intent/tweet?text=${encodeURIComponent(share.text)}&url=${encodeURIComponent(share.url)}`;
+  openSharePopup(url);
+}
+
+function handleShareFacebook() {
+  const share = getShareContext();
+  const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(share.url)}`;
+  openSharePopup(url);
+}
+
+function handleShareLinkedIn() {
+  const share = getShareContext();
+  const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(share.url)}`;
+  openSharePopup(url);
+}
+
+function handleCopyLink() {
+  const share = getShareContext();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(share.url).then(() => {
+      copyLinkBtn.textContent = "Copied!";
+      setTimeout(() => {
+        copyLinkBtn.textContent = "Copy Link";
+      }, 1200);
+    }).catch(() => {});
+  }
+}
+
 [textLine1Input, textLine2Input].forEach((input) => {
   input.addEventListener("input", drawPlate);
 });
@@ -183,10 +285,19 @@ textColorInputs.forEach((input) => {
 
 presetOverlayInput.addEventListener("change", handlePresetOverlay);
 downloadBtn.addEventListener("click", downloadPlate);
+nativeShareBtn.addEventListener("click", handleNativeShare);
+shareXBtn.addEventListener("click", handleShareX);
+shareFacebookBtn.addEventListener("click", handleShareFacebook);
+shareLinkedInBtn.addEventListener("click", handleShareLinkedIn);
+copyLinkBtn.addEventListener("click", handleCopyLink);
 
 syncSelectedOptionClass(backgroundColorInputs);
 syncSelectedOptionClass(textColorInputs);
 handlePresetOverlay();
+
+if (!navigator.share) {
+  nativeShareBtn.style.display = "none";
+}
 
 if (document.fonts && document.fonts.load) {
   document.fonts.load("400 352px 'Zurich Extra Condensed Regular'").then(() => {
