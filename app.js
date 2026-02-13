@@ -148,7 +148,7 @@ function drawPlate() {
   drawEmbossedText(textLine1Input.value || " ", width / 2, 108, "bold 72px Arial, sans-serif", selectedTextColor);
   drawEmbossedText(
     licensePlateNumber || " ",
-    width / 2,
+    width * 0.6,
     height / 2 + 18,
     "400 352px 'Zurich Extra Condensed Regular', Arial, sans-serif",
     selectedTextColor,
