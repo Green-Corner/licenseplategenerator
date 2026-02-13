@@ -23,7 +23,7 @@ body {
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: var(--text);
-  background: radial-gradient(circle at top left, #ffffff 0%, var(--bg) 45%);
+  /* background: radial-gradient(circle at top left, #ffffff 0%, var(--bg) 45%); */
 }
 
 .app {
