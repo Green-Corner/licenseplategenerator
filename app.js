@@ -211,7 +211,7 @@ function downloadPlate() {
 }
 
 function getShareContext() {
-  const shareUrl = window.location.href;
+  const shareUrl = "https://alumni.asu.edu/services/asu-license-plates";
   return {
     url: shareUrl,
     text: "Check out this ASU license plate generator.",
